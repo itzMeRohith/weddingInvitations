@@ -2,7 +2,7 @@ FROM node:24-alpine AS build
 WORKDIR /app
 COPY package.json build.mjs wedding-config.js ./
 COPY index.html styles.css app.js ./
-COPY *.webp ./
+COPY *.webp *.jpg *.svg robots.txt ./
 ARG SITE_URL
 RUN npm run build
 

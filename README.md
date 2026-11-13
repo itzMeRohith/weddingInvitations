@@ -65,3 +65,11 @@ The existing static architecture was retained instead of introducing React/TypeS
 Calendar files use UTC instants: ceremony 05:30–06:00 UTC (11:00–11:30 AM IST); celebration starts 07:30 UTC (1:00 PM IST), with no unverified end time. Guests open the downloaded ICS file in their chosen calendar. WhatsApp receives a prefilled attendance message only when the guest follows the link; the guest must send it. Wishes animate locally and are not stored or transmitted. Share uses the current URL unless `canonicalUrl` is set. Clipboard failures fall back to selectable text. External fonts load from Google Fonts; the verified celebration map loads from Google Maps; no analytics, attendee database, tracking scripts or cookies are used. Georgia and Arial are offline fallbacks.
 
 See `QA-REPORT.md` for verified checks and the remaining browser/device validation.
+
+## WhatsApp preview deployment
+
+Rebuild and redeploy the latest source on CapRover. The live HTML must reference `https://rohithakhila.lyric4u.com/wedding-preview.jpg`; that URL must return HTTP 200 with `image/jpeg`. `og:image` is placed near the start of the HTML, and the full invitation information remains in the description and event JSON-LD. The preview uses concise event details because messaging apps can truncate long descriptions.
+
+The scanned `floral-top.webp` and `floral-bottom.webp` files have been removed. Decoration uses original `wedding-botanicals.svg` line art. The build clears stale copies of the scanned assets, and CSS/script URLs include a version to refresh older browser caches.
+
+After deployment, paste the link into a new WhatsApp message and wait for the preview before sending. If necessary, try `https://rohithakhila.lyric4u.com/?v=wedding-3`. Check WhatsApp Settings > Privacy > Advanced: Disable link previews must be off. Existing sent messages may retain their previous preview.

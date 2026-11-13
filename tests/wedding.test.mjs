@@ -23,3 +23,18 @@ test('Separate celebration calendar uses confirmed 1 PM IST start without fabric
  assert.notEqual(ics.match(/UID:(.*)/)[1],calendarContent().match(/UID:(.*)/)[1]);
  assert.doesNotMatch(calendarContent(),/VIBGYOR/);
 });
+
+test('Social preview is static, uses the public JPEG, and keeps key tags early', async()=>{
+ const html=await readFile(new URL('../index.html',import.meta.url),'utf8');
+ const image='https://rohithakhila.lyric4u.com/wedding-preview.jpg';
+ for(const key of ['og:image','og:image:secure_url']) assert.ok(html.includes(`property="${key}" content="${image}"`));
+ assert.ok(html.includes(`name="twitter:image" content="${image}"`));
+ assert.ok(html.indexOf('property="og:image"')<2000);
+ assert.ok(html.includes('content="image/jpeg"'));
+ assert.ok(html.includes('property="og:url" content="https://rohithakhila.lyric4u.com/"'));
+ const jpg=await readFile(new URL('../wedding-preview.jpg',import.meta.url));
+ assert.equal(jpg.readUInt16BE(0),0xffd8);
+ const css=await readFile(new URL('../styles.css',import.meta.url),'utf8');
+ assert.doesNotMatch(css,/floral-(top|bottom)\.webp/);
+ await access(new URL('../wedding-botanicals.svg',import.meta.url));
+});

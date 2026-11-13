@@ -1,7 +1,8 @@
-import { mkdir, copyFile, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, copyFile, readFile, writeFile, rm } from 'node:fs/promises';
 import { wedding } from './wedding-config.js';
 await mkdir('dist',{recursive:true});
-const files=['index.html','styles.css','app.js','wedding-config.js','floral-top.webp','floral-bottom.webp',...Object.values(wedding.photos).map(p=>p.src)];
+for (const old of ['floral-top.webp', 'floral-bottom.webp']) await rm(`dist/${old}`, { force: true });
+const files=['index.html','styles.css','app.js','wedding-config.js','wedding-preview.jpg','wedding-botanicals.svg','robots.txt',...Object.values(wedding.photos).map(p=>p.src)];
 for(const file of files)await copyFile(file,`dist/${file}`);
 console.log(`Built ${files.length} static files to dist/`);
 
@@ -15,7 +16,7 @@ if (siteUrl) {
   if (!url.pathname.endsWith('/')) url.pathname += '/';
   const escape = value => value.replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
   let html = await readFile('dist/index.html', 'utf8');
-  const image = escape(new URL(wedding.photos.hero.src, url).href);
+  const image = escape(new URL('wedding-preview.jpg', url).href);
   html = html.replace(/(<meta (?:property="og:image"|property="og:image:secure_url"|name="twitter:image") content=")[^"]*(">)/g, (_, before, after) => before + image + after);
   html = html.replace(/<link rel="canonical" href="[^"]*">|<meta property="og:url" content="[^"]*">/g, '');
   html = html.replaceAll(wedding.canonicalUrl, url.href);
