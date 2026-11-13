@@ -16,7 +16,9 @@ if (siteUrl) {
   const escape = value => value.replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
   let html = await readFile('dist/index.html', 'utf8');
   const image = escape(new URL(wedding.photos.hero.src, url).href);
-  html = html.replace(/(<meta (?:property="og:image"|name="twitter:image") content=")[^"]*(">)/g, (_, before, after) => before + image + after);
+  html = html.replace(/(<meta (?:property="og:image"|property="og:image:secure_url"|name="twitter:image") content=")[^"]*(">)/g, (_, before, after) => before + image + after);
+  html = html.replace(/<link rel="canonical" href="[^"]*">|<meta property="og:url" content="[^"]*">/g, '');
+  html = html.replaceAll(wedding.canonicalUrl, url.href);
   html = html.replace('</head>', `<link rel="canonical" href="${escape(url.href)}"><meta property="og:url" content="${escape(url.href)}"></head>`);
   await writeFile('dist/index.html', html);
 } else {

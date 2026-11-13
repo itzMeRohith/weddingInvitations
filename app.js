@@ -39,7 +39,13 @@ ${photo('finale','06','Forever<br>Starts <em>Here</em>','In every lifetime, I wo
 <section class="section paper closing center"><div class="reveal">${label('With love,')}<h2>${e(w.names[0])} <em>&</em> ${e(w.names[1])}</h2><div class="closing-date">${w.dateLabel}</div><p>We can't wait to celebrate with you.</p><p class="family-signoff">${e(w.family.signOff)}</p><p class="family-acknowledgment">${e(w.family.extendedFamily)}</p><span class="flourish" aria-hidden="true">❧</span><div class="closing-links"><a href="${mapsUrl()}" target="_blank" rel="noopener">Ceremony location ↗</a><a href="${mapsUrl('celebration')}" target="_blank" rel="noopener">Celebration location ↗</a><button data-calendar>Add to Calendar +</button><a href="${rsvpUrl()}" target="_blank" rel="noopener">WhatsApp RSVP ↗</a><button id="share-invitation">Share Invitation ↗</button></div><a class="phone" href="tel:${w.phone}">${w.phoneLabel}</a></div><footer><span>R & A</span><span>A beautiful beginning · 2027</span><a href="#home">Back to the beginning ↑</a></footer></section>`;
 document.querySelectorAll('[data-couple]').forEach(n=>n.textContent=couple);
 document.querySelectorAll('[data-date]').forEach(n=>n.textContent=w.dateLabel);
-if(w.canonicalUrl){ const canonical=document.createElement('link');canonical.rel='canonical';canonical.href=w.canonicalUrl;document.head.append(canonical);const og=document.createElement('meta');og.setAttribute('property','og:url');og.content=w.canonicalUrl;document.head.append(og);document.querySelector('[property="og:image"]').content=new URL(w.photos.hero.src,w.canonicalUrl).href; }
+if(w.canonicalUrl){
+  const canonical=document.querySelector('link[rel="canonical"]') || document.head.appendChild(document.createElement('link'));
+  canonical.rel='canonical';canonical.href=w.canonicalUrl;
+  const og=document.querySelector('[property="og:url"]') || document.head.appendChild(document.createElement('meta'));
+  og.setAttribute('property','og:url');og.content=w.canonicalUrl;
+  document.querySelector('[property="og:image"]').content=new URL(w.photos.hero.src,w.canonicalUrl).href;
+}
 const reduced=matchMedia('(prefers-reduced-motion: reduce)');
 const opening=$('#opening');
 $('#main').inert=true; $('.site-header').inert=true; document.body.classList.add('intro-active');
