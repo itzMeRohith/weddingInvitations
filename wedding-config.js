@@ -24,7 +24,7 @@ export const wedding = {
   get address() { return this.ceremony.address; },
   get verifiedMapUrl() { return this.ceremony.verifiedMapUrl; },
   phone: '+917034292134', phoneLabel: '+91 7034292134',
-  canonicalUrl: null,
+  canonicalUrl: 'https://rohithakhila.lyric4u.com/',
   family: {
     groomParents: 'Ravindran Kunnath and Geetha Ravindran',
     groomAddress: 'Kunnummal House, Hajiyarpadi, Urupuram P.O., Areekode, Malappuram',

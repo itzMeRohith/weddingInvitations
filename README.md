@@ -24,7 +24,7 @@ The separate celebration is Sunday, 10 January 2027, from 1:00 PM onwards at VIB
 
 The celebration calendar file contains the confirmed start but deliberately omits DTEND and DURATION; no ending time is invented. Each event has its own calendar UID, venue, address, directions and copy action. The two remaining pending items are listed under `verification.pending`: the celebration ending time obscured on the printed card, and the precise ceremony house pin. The original card image was not supplied; these content corrections use the family's transcription, not a claim of visual OCR verification.
 
-Set `canonicalUrl` to the final public origin. Update static metadata in `index.html` with that origin and an absolute `og:image` URL before public launch: social crawlers may not execute JavaScript. The supplied image can be used as the social image without alteration.
+Set `canonicalUrl` in `wedding-config.js` to the final public URL, then rebuild and redeploy. The build writes absolute photo, canonical, and Open Graph URLs directly into `dist/index.html` so social crawlers can read them without JavaScript. You can alternatively supply `SITE_URL` at build time (Docker: `--build-arg SITE_URL=https://your-domain/`). Runtime environment variables do not change the built static HTML. Messaging apps may shorten descriptions and cache earlier previews.
 
 ## Deploy on Vercel
 
@@ -35,6 +35,19 @@ Set `canonicalUrl` to the final public origin. Update static metadata in `index.
 5. Test the resulting link from a phone without an authenticated developer session before sending to guests.
 
 A Sites deployment, if available, preserves its default private audience. It is a review link for the owner; it is not a public guest invitation. Use Vercel for the requested broadly shareable guest URL unless Site sharing is explicitly changed.
+
+## Deploy on CapRover
+
+The root `captain-definition` points to the included multi-stage `Dockerfile`. It builds the static site with Node.js and serves only `dist/` through NGINX on port 80. No environment variables or persistent storage are required.
+
+1. Create a web app in your CapRover dashboard and set **Container HTTP Port** to `80`.
+2. Deploy this repository using the CapRover CLI (`caprover deploy`) or connect the repository in the app's Deployment tab. Keep the Captain Definition Path as `./captain-definition`. Commit the deployment files before deploying through Git or the CLI's Git-based workflow.
+3. Configure your public domain, enable HTTPS, and enable Force HTTPS in CapRover.
+4. Set `canonicalUrl` in `wedding-config.js` to your public URL, then redeploy; the build generates the static preview URLs.
+
+For a local container preview, run `docker build -t wedding-invitation .` and `docker run --rm -p 8080:80 wedding-invitation`, then visit http://localhost:8080.
+
+See the [CapRover deployment definition documentation](https://caprover.com/docs/captain-definition-file).
 
 ## Source organization
 
